@@ -13,6 +13,7 @@ volatile unsigned char segundos = 0;
 volatile unsigned char porta_aberta = 0;
 volatile unsigned char alarme_ativo = 0;
 
+
 void timer1_init() {
     // Timer1 no modo CTC, prescaler 1024
     // WGM12 = 1 ? modo CTC (Clear Timer on Compare)
@@ -46,9 +47,17 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 ISR(INT0_vect) {
-    // Detecta mudança no estado da porta (PD2)
-     porta_aberta = 1;
-     segundos = 0;
+    if (PIND & (1 << PD2)) {
+        // Porta aberta
+        porta_aberta = 1;
+        segundos = 0;
+    } else {
+        // Porta fechada
+        porta_aberta = 0;
+        segundos = 0;
+        alarme_ativo = 0;
+        PORTC = 0b00000000; // Desliga alarme
+    }
 }
 
 ISR(INT1_vect) {
