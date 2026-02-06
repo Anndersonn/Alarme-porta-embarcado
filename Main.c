@@ -13,7 +13,6 @@ volatile unsigned char segundos = 0;
 volatile unsigned char porta_aberta = 0;
 volatile unsigned char alarme_ativo = 0;
 
-
 void timer1_init() {
     // Timer1 no modo CTC, prescaler 1024
     // WGM12 = 1 ? modo CTC (Clear Timer on Compare)
@@ -32,7 +31,7 @@ void io_init() {
 
 void int_init() {
     // Interrupções externas com borda de subida
-    EICRA = 0b00001011;         // ISC00=1 (INT0), ISC01=1 (INT0), ISC10=0 (INT1), ISC11=1 (INT1)
+    EICRA = 0b00001001;         // ISC00=1 (INT0), ISC01=1 (INT0) = qualquer mudança; ISC10=0 (INT1), ISC11=1 (INT1) = borda de descida
     EIMSK = 0b00000011;         // Habilita INT0 e INT1
 }
 
@@ -47,17 +46,17 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 ISR(INT0_vect) {
-    if (PIND & (1 << PD2)) {
-        // Porta aberta
-        porta_aberta = 1;
-        segundos = 0;
-    } else {
-        // Porta fechada
-        porta_aberta = 0;
-        segundos = 0;
-        alarme_ativo = 0;
-        PORTC = 0b00000000; // Desliga alarme
-    }
+	if (PIND & (1 << PD2)) {
+		// Porta aberta
+		porta_aberta = 1;
+		segundos = 0;
+		} else {
+		// Porta fechada
+		porta_aberta = 0;
+		segundos = 0;
+		alarme_ativo = 0;
+		PORTC = 0b00000000; // Desliga alarme
+	}
 }
 
 ISR(INT1_vect) {
