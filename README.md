@@ -1,1 +1,1 @@
-Este projeto pode ser usado no SimulIDE
+Este projeto foi usado o código fonte no Microchip Studio e simulado no SimulIDE
