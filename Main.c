@@ -38,7 +38,7 @@ void int_init() {
 ISR(TIMER1_COMPA_vect) {
     if (porta_aberta && !alarme_ativo) { // Se a porta estiver aberta e o alarme não disparado
         segundos++;
-        if (segundos >= 3) {
+        if (segundos >= 10) {
             PORTC = 0b00000100;   // Liga o alarme
             alarme_ativo = 1;
         }
